@@ -95,6 +95,7 @@ script cost a b = reverse . snd $ d m n
                                  , go (i - 1) (j - 1) $ Modify (arr ! i) (brr ! j)
                                  ]
         minimum' = minimumBy (comparing fst)
+        go :: Int -> Int -> Action -> (Distance, [Action])
         go i j action = let (score, actions) = ds ! (i, j)
                         in (score + cost action, action:actions)
         ds = listArray bounds [d i j | (i, j) <- range bounds]
