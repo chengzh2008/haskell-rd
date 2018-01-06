@@ -117,3 +117,15 @@ many1 pa = do
 -- parse (many1 digit) "133def" -> [("133","def")]
 -- parse (many1 digit) "def" -> []
 -- parse (many0 digit) "def" -> [("","def")]
+
+-- parse repeated applicataions of a parser p, seperated by applications of a parser sep, whose results are thrown away
+sepby0 :: Parser a -> Parser b -> Parser [a]
+sepby0 pa sep = sepby1 pa sep +++ mzero
+
+sepby1 :: Parser a -> Parser b -> Parser [a]
+sepby1 pa sep = do
+  a <- pa
+  as <- many0 (many1 sep >> pa)
+  return (a:as)
+-- parse (sepby0 a b) "aaaa" -> [("a","aaa")]
+-- parse (sepby0 a b) "abbbabbbaa" -> [("aaa","a")]
